@@ -1,0 +1,26 @@
+#En Docker compose se define cuando se va a levantar el docker file y tambien usar las variables de entorno y levantar la imagen de postgresql
+#Este archivo puede servir para componer una serie de contenedores como servicios asi como definir redes, volumenes a partir de un archivo .yml
+version: '2.24.2'
+
+services:
+  java_app:
+    container_name: java_app
+    image: pee-java-app:1.0.0
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_URL=jdbc:postgresql://java_db:5432/postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+    depends_on:
+      - java_db
+  java_db:
+    container_name: java_db
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
